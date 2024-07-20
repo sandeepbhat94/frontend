@@ -9,16 +9,17 @@ function Header() {
     const [showSuggestions, setShowSuggestions] = useState(false);
     const searchRef = useRef();
 
-    // Function to handle input change
-    const handleInputChange = async (event) => {
-        const value = event.target.value;
-        setSearchTerm(value);
-        // setSuggestions(filteredSuggestions);
-        setShowSuggestions(true);
-    };
-
     useEffect(() => {
-        const handler = setTimeout(async() => {
+        document.addEventListener('click', handleClickOutside);
+        return () => {
+            document.removeEventListener('click', handleClickOutside);
+
+        };
+    }, []);
+
+    //Debouncing for api call
+    useEffect(() => {
+        const handler = setTimeout(async () => {
             const res = await getRequest(`news/${searchTerm}`);
             setSuggestions(res.data);
 
@@ -29,7 +30,21 @@ function Header() {
         };
     }, [searchTerm])
 
-    // Handle click outside search bar to close suggestions
+    // Function to handle input change
+    const handleInputChange = async (event) => {
+        const value = event.target.value;
+        setSearchTerm(value);
+        // setSuggestions(filteredSuggestions);
+        setShowSuggestions(true);
+    };
+
+    //clearing text form search
+    const handleClearClick = () => {
+        setSearchTerm('');
+        setSuggestions([])
+    };
+
+    // handling click outside search bar to close suggestions
     const handleClickOutside = (event) => {
         if (searchRef.current && !searchRef.current.contains(event.target)) {
             setShowSuggestions(false);
@@ -37,13 +52,6 @@ function Header() {
             setSearchTerm("")
         }
     };
-
-    useEffect(() => {
-        document.addEventListener('click', handleClickOutside);
-        return () => {
-            document.removeEventListener('click', handleClickOutside);            
-        };
-    }, []);
 
     return (
         <header className="header">
@@ -57,18 +65,14 @@ function Header() {
                     value={searchTerm}
                     onChange={handleInputChange}
                 />
-                {showSuggestions && (
+                {searchTerm && (
+                    <button className="clear-button" onClick={handleClearClick}>
+                        Clear
+                    </button>
+                )}
+                {showSuggestions && searchTerm && (
                     <ul className="related-items">
-                        {suggestions.map((news, index) => (
-                            // <li key={index} className="card">
-                            //     <div className="card-content">
-                            //         <h3>{item.title}</h3>
-                            //         <p className="source">{item.source}</p>
-                            //         <p className="publish-at">{item.publishAt}</p>
-                            //         <p className="description">{item.description}</p>
-                            //     </div>
-                            //     {/* You can add more elements or buttons here */}
-                            // </li>
+                        {suggestions.map((news, index) => (                            
                             <NewsCard
                                 key={index}
                                 title={news.title}
