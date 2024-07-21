@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import NewsCard from './NewsCard';
 import { getRequest } from '../helper/api';
+import { Link } from 'react-router-dom';
 
 
 function Header() {
@@ -56,7 +57,9 @@ function Header() {
     return (
         <header className="header">
             <div className="logo">
-                <img src="https://png.pngtree.com/png-clipart/20201208/original/pngtree-realistic-breaking-news-label-designs-png-image_5516272.jpg" alt="Logo" />
+                <Link to={`/`} className="news-item-link">
+                    <img src="https://png.pngtree.com/png-clipart/20201208/original/pngtree-realistic-breaking-news-label-designs-png-image_5516272.jpg" alt="Logo" />
+                </Link>
             </div>
             <div className="search-bar" ref={searchRef}>
                 <input
@@ -72,15 +75,20 @@ function Header() {
                 )}
                 {showSuggestions && searchTerm && (
                     <ul className="related-items">
-                        {suggestions.map((news, index) => (                            
-                            <NewsCard
-                                key={index}
-                                title={news.title}
-                                description={news.description}
-                                imageUrl={news.urlToImage}
-                                source={news.source}
-                                timeAgo={news.publishedAt}
-                            />
+                        {suggestions.map((news, index) => (
+                            <Link to={`/news/${news.author}`} key={index} className="news-item-link">
+                                <span onClick={() => setTimeout(() => { window.location.reload() }, 100)}>
+                                    <NewsCard
+                                        key={index}
+                                        title={news.title}
+                                        description={news.description}
+                                        imageUrl={news.urlToImage}
+                                        source={news.source}
+                                        timeAgo={news.publishedAt}
+                                        author={news.author}
+                                    />
+                                </span>
+                            </Link>
                         ))}
                     </ul>
                 )}
