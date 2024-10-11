@@ -508,6 +508,7 @@ function firstFunction() {
   setTimeout(function () {
     console.log("First function called");
   }, 1000);
+
 }
 function secondFunction() {
   console.log("Second function called");
@@ -520,7 +521,78 @@ Output;
 // First function called
 ```
 
+=======================================================================================================
+# Pure Functions in JavaScript
 
+## Definition
+
+A **pure function** is a function that:
+1. **Deterministic**: Always produces the same output given the same input. It does not rely on any external state or variables.
+2. **No Side Effects**: Does not cause any observable changes in the state of the application. This means it does not modify external variables, data structures, or perform I/O operations.
+
+## Characteristics of Pure Functions
+
+1. **Referential Transparency**: You can replace a function call with its output value without changing the program’s behavior. This makes functions predictable and easier to reason about.
+
+2. **Immutability**: Pure functions typically work with immutable data. Instead of modifying existing data, they return new data structures.
+
+3. **Easier Testing**: Because pure functions depend only on their input and produce no side effects, they are easier to test. You can write unit tests to verify their behavior easily.
+
+4. **Memoization**: Pure functions can be optimized using techniques like memoization, which caches results based on inputs to improve performance.
+
+## Examples
+
+### Pure Function Example
+
+```javascript
+function add(a, b) {
+  return a + b; // Always returns the same output for the same inputs
+}
+
+console.log(add(2, 3)); // Output: 5
+console.log(add(2, 3)); // Output: 5 (same output for the same input)
+
+--------------------------------------------
+//Impure
+let numberArray = [];
+const impureAddNumber = (number) => numberArray.push(number);
+//Pure
+const pureAddNumber = (number) => (argNumberArray) =>
+  argNumberArray.concat([number]);
+
+//Display the results
+console.log(impureAddNumber(6)); // returns 1
+console.log(numberArray); // returns [6]
+console.log(pureAddNumber(7)(numberArray)); // returns [6, 7]
+console.log(numberArray); // returns [6]
+```
+
+======================================================================================================
+# Generator Functions in JavaScript
+
+## Definition
+
+A **generator function** is a special type of function that can be paused and resumed. It allows you to define an iterative algorithm by using the `function*` syntax and the `yield` keyword. Instead of returning a single value, a generator can yield multiple values over time.
+
+## Syntax
+
+```javascript
+function* numberGenerator() {
+  yield 1{
+    return 5
+  }
+  yield 2;
+  yield 3;
+}
+
+const gen = numberGenerator();
+
+console.log(gen.next()); // { value: 1, done: false }
+console.log(gen.next()); // { value: 2, done: false }
+console.log(gen.next()); // { value: 3, done: false }
+console.log(gen.next()); // { value: undefined, done: true }
+
+```
 =======================================================================================================
 # JavaScript: Event Delegation
 
@@ -620,6 +692,35 @@ There are two main polyfill libraries available,
 
 Core.js: It is a modular javascript library used for cutting-edge ECMAScript features.
 Polyfill.io: It provides polyfills that are required for browser needs.
+
+# Example
+The Array.prototype.map method is a common method used to create a new array populated with the results of calling a provided function on every element in the calling array. If you want to demonstrate how to create a polyfill for this method, here's how you can do it:
+
+```js
+if (!Array.prototype.map) {
+  Array.prototype.map = function(callback, thisArg) {
+    if (this == null) {
+      throw new TypeError('this is null or not defined');
+    }
+    
+    if (typeof callback !== 'function') {
+      throw new TypeError(callback + ' is not a function');
+    }
+    
+    const O = Object(this);
+    const len = O.length >>> 0; // Convert to a positive integer
+    const result = new Array(len);
+    
+    for (let i = 0; i < len; i++) {
+      if (i in O) {
+        result[i] = callback.call(thisArg, O[i], i, O);
+      }
+    }
+    
+    return result;
+  };
+}
+```
 
 =================================================================================================
 ## What is tree shaking
@@ -743,21 +844,80 @@ console.log('End');
 // Timeout 2
 ```
 ===================================================================================================
-# List down some of the features of ES6
+## List down some of the features of ES6
 Below are the list of some new features of ES6,
 
-Support for constants or immutable variables
-Block-scope support for variables, constants and functions
-Arrow functions
-Default parameters
-Rest and Spread Parameters
-Template Literals
+# Support for constants or immutable variables
+# Block-scope support for variables, constants and functions
+# Arrow functions
+# Default parameters
+```js
+ const multiply = (a, b = 1) => a * b; 
+ ```
+
+# Rest and Spread Parameters
+
+```js
+// Spread
+const arr1 = [1, 2];
+const arr2 = [3, 4];
+const combined = [...arr1, ...arr2];
+
+// Rest
+const sum = (...numbers) => numbers.reduce((a, b) => a + b, 0);
+sum(1,2,3,4,5,6)
+```
+# Template Literals
+```js
+const name = "Alice";
+const greeting = `Hello, ${name}!`;
+
+```
 Multi-line Strings
-Destructuring Assignment
-Enhanced Object Literals
-Promises
-Classes
-Modules
+
+# Destructuring Assignment
+```js
+const person = { name: "Alice", age: 25 };
+const { name, age } = person;
+```
+
+# Enhanced Object Literals
+```js
+const name = "Alice";
+const person = {
+  name,
+  greet() {
+    console.log(`Hello, ${this.name}`);
+  }
+};
+```
+# Promises
+```js
+const fetchData = () => {
+  return new Promise((resolve, reject) => {
+    // Asynchronous operation
+    resolve(data);
+  });
+};
+
+```
+# Classes
+```js
+class Person {
+  constructor(name) {
+    this.name = name;
+  }
+  greet() {
+    console.log(`Hello, ${this.name}`);
+  }
+}
+
+```
+# Modules
+```js
+export const myFunction = () => {};
+import { myFunction } from './myModule.js';
+```
 
 ==================================================================================
 # What are template literals
