@@ -271,7 +271,7 @@ export default {
     Reordering Lists: If the order of list items is likely to change (e.g., drag-and-drop), it’s important that each list item has a unique and stable key to prevent Vue from reusing or misplacing elements.
 
 ======================================================================================================================================================
-<a name="method" />
+<a name="methods" />
 ## 14 - METHODS
 
 ```vue
