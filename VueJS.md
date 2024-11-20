@@ -1,6 +1,7 @@
 ## TOPICS
 * [13 Conditional rendering
 ](#Conditional_rendering)
+* [14 - METHODS](#methods)
 ----------------------------------------------------------------------------------------------------------------------------
 ## 13 Conditional rendering
 
